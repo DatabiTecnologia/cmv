@@ -1,6 +1,12 @@
 import streamlit as st
 import mysql.connector
+from dotenv import load_dotenv
+import os
 
+# Carrega variáveis do .env
+load_dotenv()
+
+# Configuração da página
 st.set_page_config(page_title="Login - Rhino", layout="centered")
 
 # Esconde sidebar, menu e rodapé apenas na página de login
@@ -14,8 +20,6 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
-
 # Inicia sessão
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
@@ -28,13 +32,14 @@ password = st.text_input("Senha", type="password")
 
 if st.button("Entrar"):
     try:
-        conn = mysql.connector.connect(
-            host="151.243.0.64",
-            user="streamlitUsr",
-            password="Lq7NajueP_Sl",
-            database="streamlit"
+        # Conecta com as variáveis do .env
+        conn2 = mysql.connector.connect(
+            host=os.getenv("DB_HOST2"),
+            user=os.getenv("DB_USER2"),
+            password=os.getenv("DB_PASSWORD2"),
+            database=os.getenv("DB_NAME2")
         )
-        cursor = conn.cursor()
+        cursor = conn2.cursor()
 
         query = """
             SELECT UserId, Password
@@ -45,7 +50,7 @@ if st.button("Entrar"):
         result = cursor.fetchone()
 
         cursor.close()
-        conn.close()
+        conn2.close()
 
         if result:
             user_id, nome = result

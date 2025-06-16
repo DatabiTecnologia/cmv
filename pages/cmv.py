@@ -7,20 +7,27 @@ from io import BytesIO
 import calendar
 import plotly.graph_objects as go
 from decimal import Decimal
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 
 def mostrar_cmv():
     st.title("📊 Relatório CMV - Filiais")
     st.write("Esta é a página do relatório CMV por filial.")
 
+    host = os.getenv("DB_HOST")
+    user = os.getenv("DB_USER")
+    password = os.getenv("DB_PASSWORD")
+    database = os.getenv("DB_NAME")
+
     def conectar():
         return mysql.connector.connect(
-            host='151.243.0.64',
-            user='Usrflym_2265',
-            password='FsyMdfYB74_p0',
-            database='flymetrics'
+            host=host,
+            user=user,
+            password=password,
+            database=database
         )
-
     hoje = datetime.now()
     col1, col2, col3 = st.columns(3)
 

@@ -3,15 +3,24 @@ import mysql.connector
 from datetime import datetime
 import pandas as pd
 from io import BytesIO
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 LIMIT_HISTORICO = 20
 
+host = os.getenv("DB_HOST")
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
+database = os.getenv("DB_NAME")
+
 def conectar():
     return mysql.connector.connect(
-        host='151.243.0.64',
-        user='Usrflym_2265',
-        password='FsyMdfYB74_p0',
-        database='flymetrics'
+        host=host,
+        user=user,
+        password=password,
+        database=database
     )
 
 def inserir_dados(dia_ontem, faturamento, qtd_pedidos, markup, custo, compras, qtd_devolucao, valor_devolucao, filial):
@@ -248,6 +257,27 @@ def aba_correcao_dados():
 
 def aba_correcao_estoque():
     st.subheader(f"🛠️ Correção de Estoque (últimos {LIMIT_HISTORICO} registros)")
+
+    # Formulário para inserção manual
+    st.markdown("### ➕ Inserir novo valor de estoque manualmente")
+
+    with st.form("form_estoque_manual"):
+        nova_data = st.date_input("📅 Data do estoque")
+        novo_valor = st.number_input("💰 Valor de estoque", min_value=0.0, step=0.01, format="%.2f")
+        nova_filial = st.text_input("🏢 Filial")
+
+        submitted = st.form_submit_button("📥 Inserir")
+        if submitted:
+            if nova_filial.strip() == "":
+                st.warning("⚠️ Preencha a filial.")
+            else:
+                sucesso = inserir_estoque(nova_data, novo_valor, nova_filial.strip())
+                if sucesso:
+                    st.success("✅ Estoque inserido com sucesso!")
+
+    st.markdown("---")
+
+    # Tabela de registros recentes
     try:
         conn = conectar()
         df = pd.read_sql(
@@ -285,6 +315,7 @@ def aba_correcao_estoque():
 
     except Exception as e:
         st.error(f"Erro ao buscar registros: {e}")
+
 
 # Exibe as abas principais
 aba = st.sidebar.radio("📚 Selecione uma opção:", ["Correção de Dados", "Importar Planilha", "Correção Estoque"])

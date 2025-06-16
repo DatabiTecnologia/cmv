@@ -4,20 +4,27 @@ from datetime import datetime
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
 st.set_page_config(page_title="Home - Rhino", layout="wide")
 
 LIMIT_HISTORICO = 20
 
 # Função de conexão com o banco de dados
+host = os.getenv("DB_HOST")
+user = os.getenv("DB_USER")
+password = os.getenv("DB_PASSWORD")
+database = os.getenv("DB_NAME")
+
 def conectar():
     return mysql.connector.connect(
-        host='151.243.0.64',
-        user='Usrflym_2265',
-        password='FsyMdfYB74_p0',
-        database='flymetrics'
+        host=host,
+        user=user,
+        password=password,
+        database=database
     )
-
 # Sidebar
 st.sidebar.title("📊 Menu")
 st.sidebar.markdown("✔️ Relatórios\n✔️ Painel de vendas\n✔️ Administração")
