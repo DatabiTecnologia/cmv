@@ -34,10 +34,10 @@ if st.button("Entrar"):
     try:
         # Conecta com as variáveis do .env
         conn2 = mysql.connector.connect(
-            host=os.getenv("DB_HOST2"),
-            user=os.getenv("DB_USER2"),
-            password=os.getenv("DB_PASSWORD2"),
-            database=os.getenv("DB_NAME2")
+            host=os.environ.get("DB_HOST2"), #os.environ.get("DB_HOST2") / os.getenv("DB_HOST2")
+            user=os.environ.get("DB_USER2"),# os.environ.get("DB_USER2") / os.getenv("DB_USER2")
+            password=os.environ.get("DB_PASSWORD2"), # os.environ.get("DB_PASSWORD2") / os.getenv("DB_PASSWORD2")
+            database=os.environ.get("DB_NAME2") # os.environ.get("DB_NAME2")/os.getenv("DB_NAME2")
         )
         cursor = conn2.cursor()
 

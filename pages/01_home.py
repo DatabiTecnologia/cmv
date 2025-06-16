@@ -13,10 +13,10 @@ st.set_page_config(page_title="Home - Rhino", layout="wide")
 LIMIT_HISTORICO = 20
 
 # Função de conexão com o banco de dados
-host = os.getenv("DB_HOST")
-user = os.getenv("DB_USER")
-password = os.getenv("DB_PASSWORD")
-database = os.getenv("DB_NAME")
+host = os.environ.get("DB_HOST")# os.environ.get("DB_HOST") / host = os.getenv("DB_HOST")
+user = os.environ.get("DB_USER")# os.environ.get("DB_USER") / os.getenv("DB_USER")
+password = os.environ.get("DB_PASSWORD")# os.environ.get("DB_PASSWORD") / os.getenv("DB_PASSWORD")
+database = os.environ.get("DB_NAME")# os.environ.get("DB_NAME")/os.getenv("DB_NAME")
 
 def conectar():
     return mysql.connector.connect(
